@@ -9,7 +9,7 @@ const RoomAndUsers = ({ socket, username, room }) => {
 
   useEffect(() => {
     socket.on('xona_odamlari', (data) => {
-      console.log(data);
+      // console.log(data);
       setRoomUsers(data);
     });
     

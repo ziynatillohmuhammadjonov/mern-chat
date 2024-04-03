@@ -20,7 +20,7 @@ const Messages = ({ socket }) => {
 
 	// Remove event listener on component unmount
     return () => socket.off('kelgan_xabar');
-  }, []);
+  }, [socket]);
 
 
 // oxirgi xonadagi 100 ta xabarni olamiz
@@ -48,12 +48,6 @@ const Messages = ({ socket }) => {
       messagesColumnRef.current.scrollHeight;
   }, [messagesRecieved]);
 
-// // xonadan chiqqan foydalanuvchi xaqida ma'lumot qo'shiamiz
-// useEffect(()=>{
-//   socket.on('xonadan_chiqish',data=>{
-
-//   })
-// })
 
 
   return (
