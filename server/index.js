@@ -120,4 +120,4 @@ io.on('connection', (socket) => {
 })
 
 
-server.listen(PORT, () => `Server is running on port ${PORT}`);
+server.listen(PORT,"0.0.0.0",() => `Server is running on port ${PORT}`);
