@@ -27,7 +27,7 @@ async function getLast100Messages(room) {
     return messages
 }
 
-app.use(cors()); // Add cors middleware
+app.use(cors({ origin: 'http://localhost:5173' })); // Add cors middleware
 
 app.get('/', (req, res) => {
     res.send("Hello world")
