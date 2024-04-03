@@ -27,14 +27,17 @@ async function getLast100Messages(room) {
     return messages
 }
 
-app.use(cors({ origin: 'http://localhost:5173' })); // Add cors middleware
 
 app.get('/', (req, res) => {
     res.send("Hello world")
 })
 
 const server = http.createServer(app);
-const io = new Server(server)
+const io = new Server(server,{
+    cors:'http://localhost:5173/',
+    methods:['GET','POST']
+
+})
 const PORT = process.env.PORT || 4000;
 
 const CHAT_BOT = 'Chat admin'
