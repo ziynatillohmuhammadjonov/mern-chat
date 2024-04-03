@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*", // или укажите конкретный домен
+        origin: "http://localhost:5173/", // или укажите конкретный домен
         methods: ["GET", "POST"]
     }
 
