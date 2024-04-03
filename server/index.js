@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 
 // xonadagi oxirgi 100 ta xabarn olish metodi
 async function getLast100Messages(room) {
-    const messages = await Message.find({ room: room }).sort({ createDateTime: 1 }).limit(100)
+    const messages = await Message.find({ room: room }).sort({ createDateTime: -1 }).limit(100)
     return messages
 }
 
@@ -33,9 +33,9 @@ app.get('/', (req, res) => {
 })
 
 const server = http.createServer(app);
-const io = new Server(server,{
-    cors:['http://localhost:5173','https://mern-chat-xi.vercel.app'],
-    methods:['GET','POST']
+const io = new Server(server, {
+    cors: ['http://localhost:5173', 'https://mern-chat-xi.vercel.app'],
+    methods: ['GET', 'POST']
 
 })
 const PORT = process.env.PORT || 4000;
@@ -90,6 +90,8 @@ io.on('connection', (socket) => {
             // console.log(await Message.find())
 
         })
+        // refresh bo'lgandagi xona odamlarin iqaytaramiz
+        socket.emit('yangilangan_xona_odamlari', {})
 
         // xondan chiqishni rejalashtiramiz
 
@@ -105,10 +107,20 @@ io.on('connection', (socket) => {
             })
             // console.log(`${username} has left the chat`);
         })
-
+        socket.on('disconnect', () => {
+            console.log('User disconnected from the chat');
+            const user = allUsers.find((user) => user.id == socket.id);
+            if (user?.username) {
+                allUsers = leaveRoom(socket.id, allUsers);
+                socket.to(chatRoom).emit('xona_odamlari', allUsers);
+                socket.to(chatRoom).emit('kelgan_xabar', {
+                    message: `${user.username} foydalanuvchi chatdan chiqib ketdi.`,
+                });
+            }
+        });
 
     })
 })
 
 
-server.listen(PORT,"0.0.0.0",() => `Server is running on port ${PORT}`);
+server.listen(PORT, "0.0.0.0", () => `Server is running on port ${PORT}`);

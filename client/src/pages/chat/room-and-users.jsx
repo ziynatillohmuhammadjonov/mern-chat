@@ -9,9 +9,17 @@ const RoomAndUsers = ({ socket, username, room }) => {
 
   useEffect(() => {
     socket.on('xona_odamlari', (data) => {
-      // console.log(data);
+      
+      console.log(data);
       setRoomUsers(data);
     });
+    // if(localStorage.getItem('name')&&localStorage.getItem('room')){
+
+
+    //   setRoomUsers({
+        
+    //   })  
+    // }
     
     return () => socket.off('xona_odamlari');
   }, []);
@@ -19,6 +27,8 @@ const RoomAndUsers = ({ socket, username, room }) => {
   const leaveRoom = () => {
     const createDateTime = Date.now();
     socket.emit('xonadan_chiqish', { username, room, createDateTime });
+    localStorage.removeItem('name')
+    localStorage.removeItem('room')
     // Redirect to home page
     navigate('/', { replace: true });
   };
