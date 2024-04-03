@@ -47,6 +47,7 @@ const io = new Server(server, {
     }
 
 })
+const port = process.env.PORT || 4000;
 
 const CHAT_BOT = 'Chat admin'
 let chatRoom = ''; // E.g. javascript, node,...
@@ -119,4 +120,4 @@ io.on('connection', (socket) => {
 })
 
 
-server.listen(4000, () => 'Server is running on port 4000');
+server.listen(port,'0.0.0.0.', () => `Server is running on port ${port}`);
