@@ -1,0 +1,1 @@
+In this project i used Mongodb with mongoose and express for backend. You can see this code in server package. And frontende use React with Vite. These technologie you can see in client package. Thanks for reading!
