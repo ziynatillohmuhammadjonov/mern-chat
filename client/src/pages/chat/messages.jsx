@@ -48,13 +48,13 @@ const Messages = ({ socket }) => {
       messagesColumnRef.current.scrollHeight;
   }, [messagesRecieved]);
 
+// // xonadan chiqqan foydalanuvchi xaqida ma'lumot qo'shiamiz
+// useEffect(()=>{
+//   socket.on('xonadan_chiqish',data=>{
 
-  // Add this
-  function sortMessagesByDate(messages) {
-    return messages.sort(
-      (a, b) => parseInt(a.createDateTime) - parseInt(b.createDateTime)
-    );
-  }
+//   })
+// })
+
 
   return (
     <div className={styles.messagesColumn} ref={messagesColumnRef}>

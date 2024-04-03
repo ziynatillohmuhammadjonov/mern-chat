@@ -6,8 +6,10 @@ const cors = require('cors');
 const dotnenv = require('dotenv')
 const {Server}=require('socket.io');
 const { default: mongoose } = require('mongoose');
+const {Message} = require('./models/message')
 
-const leaveRoom = require('./utils/leave-room'); // Add this
+const addMessageDb = require('./lib/insertDb')
+const leaveRoom = require('./lib/leave-room'); // Add this
 
 dotnenv.config()
 mongoose.connect(process.env.MONGO_URI).then(()=>{
@@ -17,17 +19,11 @@ mongoose.connect(process.env.MONGO_URI).then(()=>{
 })
 
 
-// init model and schema for mongodb
-const Message = mongoose.model("Message", new mongoose.Schema({
-    message:String,
-    username:String,
-    room:String,
-    createDateTime:Date
-}))
+
 
 // xonadagi oxirgi 100 ta xabarn olish metodi
 async function getLast100Messages(room){
-    const messages = await Message.find({room:room}).sort({_id:-1}).limit(100)
+    const messages = await Message.find({room:room}).sort({createDateTime:1}).limit(100)
     return messages
 }
 
@@ -76,10 +72,9 @@ io.on('connection',(socket)=>{
             username:CHAT_BOT,
             createDateTime
         })
-
         chatRoom = room
         allUsers.push({id: socket.id, username, room})
-        chatRoomUsers = allUsers.filter((user)=>{user.room===room})
+        chatRoomUsers = allUsers.filter((user)=>user.room===room)
         socket.to(room).emit('xona_odamlari', chatRoomUsers)
         socket.emit('xona_odamlari', chatRoomUsers)
 
@@ -88,22 +83,23 @@ io.on('connection',(socket)=>{
         socket.on('xabar_yubor',async(data)=>{
             const {username, room, message, createDateTime} = data
             io.in(room).emit('kelgan_xabar', data)
-            const newMsg = new Message(data)
-            await newMsg.save()
-            console.log(await Message.find())
+            addMessageDb(data)
+            // const newMsg = new Message(data)
+            // await newMsg.save()
+            // console.log(await Message.find())
 
         })
 
         // xondan chiqishni rejalashtiramiz
 
-        socket.off('xondan_chiqish',(data)=>{
+        socket.on('xonadan_chiqish',(data)=>{
             socket.leave(data.room)
             const createDateTime = Date.now()
             allUsers = leaveRoom(socket.id, allUsers)
             socket.to(data.room).emit('xona_odamlari', allUsers)
             socket.to(data.room).emit('kelgan_xabar', {
                 username:CHAT_BOT,
-                message: `${data.username} chardan chiqib ketdi. :(`,
+                message: `${data.username} chatdan chiqib ketdi. :(`,
                 createDateTime
             })
             console.log(`${username} has left the chat`);

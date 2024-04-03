@@ -12,9 +12,9 @@ const RoomAndUsers = ({ socket, username, room }) => {
       console.log(data);
       setRoomUsers(data);
     });
-
+    
     return () => socket.off('xona_odamlari');
-  }, [socket]);
+  }, []);
 
   const leaveRoom = () => {
     const createDateTime = Date.now();
