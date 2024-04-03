@@ -109,12 +109,14 @@ io.on('connection', (socket) => {
         })
         socket.on('disconnect', () => {
             console.log('User disconnected from the chat');
+            const createDateTime = Date.now()
             const user = allUsers.find((user) => user.id == socket.id);
             if (user?.username) {
                 allUsers = leaveRoom(socket.id, allUsers);
                 socket.to(chatRoom).emit('xona_odamlari', allUsers);
                 socket.to(chatRoom).emit('kelgan_xabar', {
                     message: `${user.username} foydalanuvchi chatdan chiqib ketdi.`,
+                    createDateTime
                 });
             }
         });
