@@ -40,10 +40,7 @@ app.get('/', (req, res) => {
 })
 
 const server = http.createServer(app);
-const io = new Server(server,{
-    cors:'http://localhost:5173',
-    methods:['GET', 'POST']
-})
+const io = new Server(server)
 
 const CHAT_BOT = 'Chat admin'
 let chatRoom = ''; // E.g. javascript, node,...
