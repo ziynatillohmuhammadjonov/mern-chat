@@ -47,11 +47,11 @@ let allUsers = []; // All users in current chat room
 
 // ummumiy socketga bog'lanish xosil qilamiz
 io.on('connection', (socket) => {
-    console.log(`${socket.id} user connected`)
+    // console.log(`${socket.id} user connected`)
 
     // foydalanuvchilarni interfeysda emit('nom',{data}) qilgan chaqirgan xodisasi bo'yicha ushlab ushlab olamiz
     socket.on('xonaga_qoshilayapman', async ({ room, username }) => {
-        console.log(`${username} foydalanuvchi ${room} nomli xonaga qo'shildi`)
+        // console.log(`${username} foydalanuvchi ${room} nomli xonaga qo'shildi`)
         //foydalanuvchini tegishli xonaga qo'shamiz
         socket.join(room)
 
@@ -103,7 +103,7 @@ io.on('connection', (socket) => {
                 message: `${data.username} chatdan chiqib ketdi. :(`,
                 createDateTime
             })
-            console.log(`${username} has left the chat`);
+            // console.log(`${username} has left the chat`);
         })
 
 
